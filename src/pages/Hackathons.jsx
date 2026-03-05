@@ -1,35 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Filter,
-  Search,
-  MapPin,
-  Calendar,
-  Trophy,
-  Users,
-  Clock,
-  ChevronRight,
-  Rocket,
-  Zap,
-  Globe,
-  Share2,
-  Heart,
-  ShieldCheck,
-} from "lucide-react";
-import { useAuth } from "../contexts/AuthContext";
-import { mockOpportunities } from "../data/mockData";
-import { API_BASE_URL } from "../config";
+  Filter, Search, MapPin, Calendar, Trophy, Users, Clock,
+  ChevronRight, Rocket, Zap, Globe, Share2, Heart, ShieldCheck
+} from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { mockOpportunities } from '../data/mockData';
+import { API_BASE_URL } from '../config';
 
 const Hackathons = () => {
   const { user } = useAuth();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [opportunities, setOpportunities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
-    location: "",
-    remote: "",
-    duration: "",
-    theme: "",
+    location: '',
+    remote: '',
+    duration: '',
+    theme: ''
   });
   const [showFilters, setShowFilters] = useState(false);
 
@@ -45,7 +33,7 @@ const Hackathons = () => {
         }
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching opportunities:", err);
+        console.error('Error fetching opportunities:', err);
         setOpportunities(mockOpportunities);
         setLoading(false);
       }
@@ -54,39 +42,32 @@ const Hackathons = () => {
     fetchOpportunities();
   }, []);
 
-  const hackathons = opportunities.filter((opp) => opp.type === "hackathon");
+  const hackathons = opportunities.filter(opp => opp.type === 'hackathon');
 
-  const filteredHackathons = hackathons.filter((hackathon) => {
-    const matchesSearch =
-      hackathon.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredHackathons = hackathons.filter(hackathon => {
+    const matchesSearch = hackathon.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       hackathon.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      hackathon.requirements.some((req) =>
-        req.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      hackathon.requirements.some(req => req.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    const matchesLocation =
-      !filters.location ||
-      hackathon.location.toLowerCase().includes(filters.location.toLowerCase());
-    const matchesRemote =
-      !filters.remote ||
-      (filters.remote === "remote" ? hackathon.remote : !hackathon.remote);
+    const matchesLocation = !filters.location || hackathon.location.toLowerCase().includes(filters.location.toLowerCase());
+    const matchesRemote = !filters.remote || (filters.remote === 'remote' ? hackathon.remote : !hackathon.remote);
 
     return matchesSearch && matchesLocation && matchesRemote;
   });
 
   const handleFilterChange = (filterType, value) => {
-    setFilters((prev) => ({
+    setFilters(prev => ({
       ...prev,
-      [filterType]: value,
+      [filterType]: value
     }));
   };
 
   const clearFilters = () => {
     setFilters({
-      location: "",
-      remote: "",
-      duration: "",
-      theme: "",
+      location: '',
+      remote: '',
+      duration: '',
+      theme: ''
     });
   };
 
@@ -95,9 +76,7 @@ const Hackathons = () => {
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex flex-col items-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-t-purple-600 border-r-4 border-r-purple-200"></div>
-          <p className="mt-4 text-slate-600 font-medium italic">
-            Loading events...
-          </p>
+          <p className="mt-4 text-slate-600 font-medium italic">Loading events...</p>
         </div>
       </div>
     );
@@ -108,11 +87,7 @@ const Hackathons = () => {
       {/* Innovation Header */}
       <div className="bg-purple-900 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
-          <svg
-            className="w-full h-full"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-          >
+          <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
           </svg>
         </div>
@@ -128,8 +103,7 @@ const Hackathons = () => {
                 Global <span className="text-purple-400">Hackathons</span> Hub
               </h1>
               <p className="text-purple-100/70 text-xl leading-relaxed">
-                Join thousands of builders tackling the world's toughest
-                challenges. Win prizes, build networks, and launch your career.
+                Join thousands of builders tackling the world's toughest challenges. Win prizes, build networks, and launch your career.
               </p>
             </div>
 
@@ -159,36 +133,31 @@ const Hackathons = () => {
         </div>
       </div>
 
+
       {/* Filters Overlay */}
       {showFilters && (
         <div className="bg-white border-b border-slate-200 animate-in slide-in-from-top-4 duration-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div>
-                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
-                  Location
-                </label>
+                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Location</label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input
                     type="text"
                     placeholder="e.g. Virtual"
                     value={filters.location}
-                    onChange={(e) =>
-                      handleFilterChange("location", e.target.value)
-                    }
+                    onChange={(e) => handleFilterChange('location', e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
-                  Format
-                </label>
+                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Format</label>
                 <select
                   value={filters.remote}
-                  onChange={(e) => handleFilterChange("remote", e.target.value)}
+                  onChange={(e) => handleFilterChange('remote', e.target.value)}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none appearance-none"
                 >
                   <option value="">All Formats</option>
@@ -198,14 +167,10 @@ const Hackathons = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
-                  Duration
-                </label>
+                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Duration</label>
                 <select
                   value={filters.duration}
-                  onChange={(e) =>
-                    handleFilterChange("duration", e.target.value)
-                  }
+                  onChange={(e) => handleFilterChange('duration', e.target.value)}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none appearance-none"
                 >
                   <option value="">Any Length</option>
@@ -232,16 +197,12 @@ const Hackathons = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
           {filteredHackathons.map((hackathon) => {
-            const hasApplied = user?.applications?.some(
-              (app) =>
-                (app.opportunityId?._id || app.opportunityId) === hackathon._id
+            const hasApplied = user?.applications?.some(app =>
+              (app.opportunityId?._id || app.opportunityId) === hackathon._id
             );
 
             return (
-              <div
-                key={hackathon._id}
-                className="group flex flex-col bg-white rounded-[2rem] border border-slate-200/60 overflow-hidden hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 hover-lift"
-              >
+              <div key={hackathon._id} className="group flex flex-col bg-white rounded-[2rem] border border-slate-200/60 overflow-hidden hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 hover-lift">
                 {/* Image Container with Dynamic Badges */}
                 <div className="relative aspect-video w-full overflow-hidden">
                   <img
@@ -283,12 +244,8 @@ const Hackathons = () => {
                         {hackathon.company.charAt(0)}
                       </div>
                       <div className="ml-3">
-                        <span className="block text-xs text-white/60 font-medium">
-                          Hosted by
-                        </span>
-                        <span className="block font-bold leading-tight">
-                          {hackathon.company}
-                        </span>
+                        <span className="block text-xs text-white/60 font-medium">Hosted by</span>
+                        <span className="block font-bold leading-tight">{hackathon.company}</span>
                       </div>
                     </div>
                   </div>
@@ -298,12 +255,10 @@ const Hackathons = () => {
                 <div className="p-8 flex-1 flex flex-col">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-emerald-600 font-bold text-xs uppercase tracking-tighter flex items-center bg-emerald-50 px-3 py-1 rounded-lg">
-                      <Trophy className="w-3.5 h-3.5 mr-1" /> {hackathon.prizes}{" "}
-                      Pool
+                      <Trophy className="w-3.5 h-3.5 mr-1" /> {hackathon.prizes} Pool
                     </span>
                     <span className="flex items-center text-slate-400 text-[11px] font-black uppercase tracking-widest">
-                      <Users className="w-3.5 h-3.5 mr-1" />{" "}
-                      {hackathon.participants} Spots
+                      <Users className="w-3.5 h-3.5 mr-1" /> {hackathon.participants} Spots
                     </span>
                   </div>
 
@@ -315,13 +270,12 @@ const Hackathons = () => {
                   <div className="mt-auto flex items-center gap-3">
                     <Link
                       to={`/opportunity/${hackathon._id}`}
-                      className={`flex-1 font-black text-center py-4 rounded-2xl transition-all shadow-xl flex items-center justify-center group/btn ${
-                        hasApplied
-                          ? "bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-emerald-100"
-                          : "bg-purple-600 text-white hover:bg-purple-700 shadow-purple-200"
-                      }`}
+                      className={`flex-1 font-black text-center py-4 rounded-2xl transition-all shadow-xl flex items-center justify-center group/btn ${hasApplied
+                        ? "bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-emerald-100"
+                        : "bg-purple-600 text-white hover:bg-purple-700 shadow-purple-200"
+                        }`}
                     >
-                      {hasApplied ? "View Registration" : "Register Now"}{" "}
+                      {hasApplied ? 'View Registration' : 'Register Now'}{" "}
                       <Rocket className="ml-2 w-4 h-4 group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5 transition-transform" />
                     </Link>
                     <button className="p-4 bg-slate-100 text-slate-500 rounded-2xl hover:bg-slate-200 transition-all">
@@ -340,14 +294,8 @@ const Hackathons = () => {
             <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
               <Rocket className="w-10 h-10 text-slate-300" />
             </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-2">
-              No hackathons found
-            </h3>
-            <p className="text-slate-500 mb-8">
-              We couldn't find any events matching your criteria. Try adjusting
-              your filters or follow our newsletter to get notified about new
-              drops.
-            </p>
+            <h3 className="text-2xl font-bold text-slate-900 mb-2">No hackathons found</h3>
+            <p className="text-slate-500 mb-8">We couldn't find any events matching your criteria. Try adjusting your filters or follow our newsletter to get notified about new drops.</p>
             <button
               onClick={clearFilters}
               className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-2xl font-black shadow-lg shadow-purple-100 transition-all"

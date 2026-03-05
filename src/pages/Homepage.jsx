@@ -1,23 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Search,
-  TrendingUp,
-  Calendar,
-  Users,
-  ArrowRight,
-  CheckCircle,
-  Globe,
-  Briefcase,
-  GraduationCap,
-  Trophy,
-  ChevronRight,
-} from "lucide-react";
-import { categories, mockOpportunities } from "../data/mockData";
-import { API_BASE_URL } from "../config";
+  Search, TrendingUp, Calendar, Users, ArrowRight, CheckCircle,
+  Globe, Briefcase, GraduationCap, Trophy, ChevronRight
+} from 'lucide-react';
+import { categories, mockOpportunities } from '../data/mockData';
+import { API_BASE_URL } from '../config';
 
 const Homepage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [opportunities, setOpportunities] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,7 +24,7 @@ const Homepage = () => {
         }
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching opportunities:", err);
+        console.error('Error fetching opportunities:', err);
         setOpportunities(mockOpportunities);
         setLoading(false);
       }
@@ -42,21 +33,15 @@ const Homepage = () => {
     fetchOpportunities();
   }, []);
 
-  const trendingOpportunities = opportunities
-    .filter((opp) => opp.trending)
-    .slice(0, 3);
-  const recentOpportunities = [...opportunities]
-    .sort((a, b) => new Date(b.posted) - new Date(a.posted))
-    .slice(0, 3);
+  const trendingOpportunities = opportunities.filter(opp => opp.trending).slice(0, 3);
+  const recentOpportunities = [...opportunities].sort((a, b) => new Date(b.posted) - new Date(a.posted)).slice(0, 3);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex flex-col items-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-t-indigo-600 border-r-4 border-r-indigo-200"></div>
-          <p className="mt-4 text-slate-600 font-medium">
-            Loading opportunities...
-          </p>
+          <p className="mt-4 text-slate-600 font-medium">Loading opportunities...</p>
         </div>
       </div>
     );
@@ -72,12 +57,10 @@ const Homepage = () => {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tight animate-in fade-in slide-in-from-bottom-4 duration-700">
-            Your Gateway to{" "}
-            <span className="text-yellow-400">Tech Opportunities</span>
+            Your Gateway to <span className="text-yellow-400">Tech Opportunities</span>
           </h1>
           <p className="text-lg md:text-xl text-indigo-100 mb-12 max-w-2xl mx-auto font-medium opacity-90 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
-            Discover internships, hackathons, and courses tailored for ambitious
-            students
+            Discover internships, hackathons, and courses tailored for ambitious students
           </p>
 
           {/* Clean Search Bar */}
@@ -102,15 +85,13 @@ const Homepage = () => {
           {/* Quick Stats */}
           <div className="flex flex-wrap justify-center gap-12 md:gap-24 opacity-80 animate-in fade-in duration-1000 delay-500">
             {[
-              { label: "Active Opportunities", value: "1+" },
-              { label: "Students Connected", value: "50K+" },
-              { label: "Partner Companies", value: "250+" },
+              { label: 'Active Opportunities', value: '1+' },
+              { label: 'Students Connected', value: '50K+' },
+              { label: 'Partner Companies', value: '250+' },
             ].map((stat, i) => (
               <div key={i} className="text-center">
                 <div className="text-3xl font-black mb-1">{stat.value}</div>
-                <div className="text-xs uppercase tracking-[0.2em] font-bold text-indigo-200">
-                  {stat.label}
-                </div>
+                <div className="text-xs uppercase tracking-[0.2em] font-bold text-indigo-200">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -122,13 +103,8 @@ const Homepage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-4">
             <div className="text-left w-full md:w-2/3">
-              <h2 className="text-4xl font-bold text-slate-900 mb-4">
-                Choose Your <span className="text-indigo-600">Pathway</span>
-              </h2>
-              <p className="text-lg text-slate-600">
-                Tailored categories to help you navigate through thousands of
-                opportunities efficiently.
-              </p>
+              <h2 className="text-4xl font-bold text-slate-900 mb-4">Choose Your <span className="text-indigo-600">Pathway</span></h2>
+              <p className="text-lg text-slate-600">Tailored categories to help you navigate through thousands of opportunities efficiently.</p>
             </div>
           </div>
 
@@ -145,16 +121,10 @@ const Homepage = () => {
                     {category.icon}
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-800 mb-2">
-                      {category.name}
-                    </h3>
-                    <p className="text-slate-500 text-sm mb-4">
-                      Explore thousands of {category.name.toLowerCase()} curated
-                      for your skill level.
-                    </p>
+                    <h3 className="text-2xl font-bold text-slate-800 mb-2">{category.name}</h3>
+                    <p className="text-slate-500 text-sm mb-4">Explore thousands of {category.name.toLowerCase()} curated for your skill level.</p>
                     <div className="flex items-center text-indigo-600 font-semibold text-sm">
-                      Get Started{" "}
-                      <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                      Get Started <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
                     </div>
                   </div>
                 </div>
@@ -168,39 +138,17 @@ const Homepage = () => {
       <div className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <span className="text-indigo-600 font-bold tracking-widest text-sm uppercase">
-              Simplified Dashboard
-            </span>
-            <h2 className="text-4xl font-bold mt-4 mb-6">
-              How CampusConnect Works
-            </h2>
-            <p className="text-slate-600">
-              Our streamline process takes you from student to professional in
-              three simple steps.
-            </p>
+            <span className="text-indigo-600 font-bold tracking-widest text-sm uppercase">Simplified Dashboard</span>
+            <h2 className="text-4xl font-bold mt-4 mb-6">How CampusConnect Works</h2>
+            <p className="text-slate-600">Our streamline process takes you from student to professional in three simple steps.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
             <div className="hidden md:block absolute top-12 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-indigo-100 to-transparent"></div>
             {[
-              {
-                number: "01",
-                title: "Create Profile",
-                desc: "Build your digital portfolio highlighting your skills, projects, and educational achievements.",
-                icon: <Users className="w-8 h-8" />,
-              },
-              {
-                number: "02",
-                title: "Apply to Tasks",
-                desc: "Browse through thousands of verified opportunities and apply with a single click.",
-                icon: <Briefcase className="w-8 h-8" />,
-              },
-              {
-                number: "03",
-                title: "Get Hired",
-                desc: "Directly connect with top-tier tech recruiters and start your professional journey.",
-                icon: <Trophy className="w-8 h-8" />,
-              },
+              { number: '01', title: 'Create Profile', desc: 'Build your digital portfolio highlighting your skills, projects, and educational achievements.', icon: <Users className="w-8 h-8" /> },
+              { number: '02', title: 'Apply to Tasks', desc: 'Browse through thousands of verified opportunities and apply with a single click.', icon: <Briefcase className="w-8 h-8" /> },
+              { number: '03', title: 'Get Hired', desc: 'Directly connect with top-tier tech recruiters and start your professional journey.', icon: <Trophy className="w-8 h-8" /> },
             ].map((step, i) => (
               <div key={i} className="relative z-10 text-center">
                 <div className="w-24 h-24 bg-indigo-600 text-white rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-indigo-600/20 transform rotate-3 hover:rotate-0 transition-transform">
@@ -210,9 +158,7 @@ const Homepage = () => {
                   </span>
                 </div>
                 <h3 className="text-2xl font-bold mb-4">{step.title}</h3>
-                <p className="text-slate-500 leading-relaxed px-4">
-                  {step.desc}
-                </p>
+                <p className="text-slate-500 leading-relaxed px-4">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -227,46 +173,28 @@ const Homepage = () => {
               <div className="text-center md:text-left">
                 <div className="inline-flex items-center space-x-2 text-orange-400 mb-2">
                   <TrendingUp className="w-6 h-6" />
-                  <span className="font-bold text-sm tracking-widest uppercase">
-                    High Demand
-                  </span>
+                  <span className="font-bold text-sm tracking-widest uppercase">High Demand</span>
                 </div>
                 <h2 className="text-4xl font-bold text-white">Trending Now</h2>
               </div>
-              <Link
-                to="/internships"
-                className="mt-6 md:mt-0 px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl border border-white/10 transition-all flex items-center group"
-              >
-                View Catalog{" "}
-                <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <Link to="/internships" className="mt-6 md:mt-0 px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl border border-white/10 transition-all flex items-center group">
+                View Catalog <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {trendingOpportunities.map((opportunity) => (
-                <div
-                  key={opportunity._id}
-                  className="group bg-slate-800/50 backdrop-blur-xl rounded-[2rem] overflow-hidden border border-white/10 hover-lift shadow-2xl"
-                >
+                <div key={opportunity._id} className="group bg-slate-800/50 backdrop-blur-xl rounded-[2rem] overflow-hidden border border-white/10 hover-lift shadow-2xl">
                   <div className="relative aspect-[16/9]">
-                    <img
-                      src={opportunity.image}
-                      alt={opportunity.title}
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={opportunity.image} alt={opportunity.title} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 to-transparent"></div>
                   </div>
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-white mb-3 truncate">
-                      {opportunity.title}
-                    </h3>
+                    <h3 className="text-2xl font-bold text-white mb-3 truncate">{opportunity.title}</h3>
                     <p className="text-slate-400 mb-6 flex items-center">
                       <Globe className="w-4 h-4 mr-2" /> {opportunity.company}
                     </p>
-                    <Link
-                      to={`/opportunity/${opportunity._id}`}
-                      className="block text-center bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all"
-                    >
+                    <Link to={`/opportunity/${opportunity._id}`} className="block text-center bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all">
                       Details
                     </Link>
                   </div>
@@ -282,32 +210,19 @@ const Homepage = () => {
         <div className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-slate-900 mb-4">
-                Fresh Drops
-              </h2>
-              <p className="text-slate-500">
-                Curated opportunities that went live today.
-              </p>
+              <h2 className="text-4xl font-bold text-slate-900 mb-4">Fresh Drops</h2>
+              <p className="text-slate-500">Curated opportunities that went live today.</p>
             </div>
             <div className="space-y-4">
               {recentOpportunities.map((opportunity) => (
-                <Link
-                  key={opportunity._id}
-                  to={`/opportunity/${opportunity._id}`}
-                  className="group flex flex-col md:flex-row md:items-center justify-between p-6 bg-slate-50 border border-slate-100 rounded-3xl hover:bg-indigo-50 transition-all"
-                >
+                <Link key={opportunity._id} to={`/opportunity/${opportunity._id}`} className="group flex flex-col md:flex-row md:items-center justify-between p-6 bg-slate-50 border border-slate-100 rounded-3xl hover:bg-indigo-50 transition-all">
                   <div className="flex items-center space-x-6">
                     <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center border border-slate-200">
                       <Briefcase className="w-6 h-6 text-indigo-600" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-slate-800">
-                        {opportunity.title}
-                      </h3>
-                      <p className="text-slate-500 text-sm">
-                        {opportunity.company} •{" "}
-                        {opportunity.location || "Remote"}
-                      </p>
+                      <h3 className="text-xl font-bold text-slate-800">{opportunity.title}</h3>
+                      <p className="text-slate-500 text-sm">{opportunity.company} • {opportunity.location || 'Remote'}</p>
                     </div>
                   </div>
                   <ChevronRight className="hidden md:block w-6 h-6 text-slate-300 transition-transform group-hover:translate-x-1" />
@@ -322,24 +237,9 @@ const Homepage = () => {
 };
 
 const MapPin = ({ className }) => (
-  <svg
-    className={className}
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-    />
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-    />
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
   </svg>
 );
 
