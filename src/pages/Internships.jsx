@@ -1,34 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
-  Filter, Search, MapPin, Calendar, DollarSign, Users,
-  ChevronRight, Briefcase, Clock, ShieldCheck, Bookmark, Share2,
-  TrendingUp, Globe
-} from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+  Filter,
+  Search,
+  MapPin,
+  Calendar,
+  DollarSign,
+  Users,
+  ChevronRight,
+  Briefcase,
+  Clock,
+  ShieldCheck,
+  Bookmark,
+  Share2,
+  TrendingUp,
+  Globe,
+} from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import { mockOpportunities } from "../data/mockData";
+import { API_BASE_URL } from "../config";
 
 const Internships = () => {
   const { user } = useAuth();
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [opportunities, setOpportunities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
-    location: '',
-    remote: '',
-    duration: '',
-    company: ''
+    location: "",
+    remote: "",
+    duration: "",
+    company: "",
   });
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const fetchOpportunities = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/opportunities');
+        const response = await fetch(`${API_BASE_URL}/api/opportunities`);
         const data = await response.json();
-        setOpportunities(data);
+        if (data && data.length > 0) {
+          setOpportunities(data);
+        } else {
+          setOpportunities(mockOpportunities);
+        }
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching opportunities:', err);
+        console.error("Error fetching opportunities:", err);
+        setOpportunities(mockOpportunities);
         setLoading(false);
       }
     };
@@ -36,33 +54,44 @@ const Internships = () => {
     fetchOpportunities();
   }, []);
 
-  const internships = opportunities.filter(opp => opp.type === 'internship');
+  const internships = opportunities.filter((opp) => opp.type === "internship");
 
-  const filteredInternships = internships.filter(internship => {
-    const matchesSearch = internship.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredInternships = internships.filter((internship) => {
+    const matchesSearch =
+      internship.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       internship.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      internship.requirements.some(req => req.toLowerCase().includes(searchTerm.toLowerCase()));
+      internship.requirements.some((req) =>
+        req.toLowerCase().includes(searchTerm.toLowerCase())
+      );
 
-    const matchesLocation = !filters.location || internship.location.toLowerCase().includes(filters.location.toLowerCase());
-    const matchesRemote = !filters.remote || (filters.remote === 'remote' ? internship.remote : !internship.remote);
-    const matchesCompany = !filters.company || internship.company.toLowerCase().includes(filters.company.toLowerCase());
+    const matchesLocation =
+      !filters.location ||
+      internship.location
+        .toLowerCase()
+        .includes(filters.location.toLowerCase());
+    const matchesRemote =
+      !filters.remote ||
+      (filters.remote === "remote" ? internship.remote : !internship.remote);
+    const matchesCompany =
+      !filters.company ||
+      internship.company.toLowerCase().includes(filters.company.toLowerCase());
 
     return matchesSearch && matchesLocation && matchesRemote && matchesCompany;
   });
 
   const handleFilterChange = (filterType, value) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [filterType]: value
+      [filterType]: value,
     }));
   };
 
   const clearFilters = () => {
     setFilters({
-      location: '',
-      remote: '',
-      duration: '',
-      company: ''
+      location: "",
+      remote: "",
+      duration: "",
+      company: "",
     });
   };
 
@@ -71,7 +100,9 @@ const Internships = () => {
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex flex-col items-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-r-4 border-blue-200"></div>
-          <p className="mt-4 text-slate-600 font-medium italic">Finding opportunities...</p>
+          <p className="mt-4 text-slate-600 font-medium italic">
+            Finding opportunities...
+          </p>
         </div>
       </div>
     );
@@ -82,7 +113,11 @@ const Internships = () => {
       {/* Career Header */}
       <div className="bg-indigo-900 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
-          <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <svg
+            className="w-full h-full"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+          >
             <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
           </svg>
         </div>
@@ -95,10 +130,12 @@ const Internships = () => {
                 <span>Premium Career Portal</span>
               </div>
               <h1 className="text-5xl md:text-6xl font-black mb-6 tracking-tight">
-                Global Internship <span className="text-indigo-400">Portal</span>
+                Global Internship{" "}
+                <span className="text-indigo-400">Portal</span>
               </h1>
               <p className="text-indigo-100/70 text-xl leading-relaxed">
-                Connect with leading companies currently hiring for technical and creative roles. Your professional journey starts here.
+                Connect with leading companies currently hiring for technical
+                and creative roles. Your professional journey starts here.
               </p>
             </div>
 
@@ -134,24 +171,30 @@ const Internships = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">Location</label>
+                <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">
+                  Location
+                </label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input
                     type="text"
                     placeholder="e.g. Remote"
                     value={filters.location}
-                    onChange={(e) => handleFilterChange('location', e.target.value)}
+                    onChange={(e) =>
+                      handleFilterChange("location", e.target.value)
+                    }
                     className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-slate-700"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">Work Type</label>
+                <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">
+                  Work Type
+                </label>
                 <select
                   value={filters.remote}
-                  onChange={(e) => handleFilterChange('remote', e.target.value)}
+                  onChange={(e) => handleFilterChange("remote", e.target.value)}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-slate-700 appearance-none"
                 >
                   <option value="">All Arrangements</option>
@@ -161,12 +204,16 @@ const Internships = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">Top Companies</label>
+                <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">
+                  Top Companies
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. Google"
                   value={filters.company}
-                  onChange={(e) => handleFilterChange('company', e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange("company", e.target.value)
+                  }
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-slate-700"
                 />
               </div>
@@ -188,12 +235,16 @@ const Internships = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
           {filteredInternships.map((internship) => {
-            const hasApplied = user?.applications?.some(app =>
-              (app.opportunityId?._id || app.opportunityId) === internship._id
+            const hasApplied = user?.applications?.some(
+              (app) =>
+                (app.opportunityId?._id || app.opportunityId) === internship._id
             );
 
             return (
-              <div key={internship._id} className="group bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col overflow-hidden hover-lift">
+              <div
+                key={internship._id}
+                className="group bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col overflow-hidden hover-lift"
+              >
                 {/* Card Header & Media */}
                 <div className="relative h-56 w-full overflow-hidden">
                   <img
@@ -232,7 +283,9 @@ const Internships = () => {
                       <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-lg font-bold">
                         {internship.company.charAt(0)}
                       </div>
-                      <span className="font-bold text-lg">{internship.company}</span>
+                      <span className="font-bold text-lg">
+                        {internship.company}
+                      </span>
                     </div>
                     <ShieldCheck className="w-5 h-5 text-blue-400 fill-blue-400/20" />
                   </div>
@@ -242,7 +295,8 @@ const Internships = () => {
                 <div className="p-8 flex-1 flex flex-col">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-lg uppercase tracking-wider">
-                      <DollarSign className="w-3.5 h-3.5 mr-1" /> {internship.salary}
+                      <DollarSign className="w-3.5 h-3.5 mr-1" />{" "}
+                      {internship.salary}
                     </div>
                     <div className="text-slate-400 text-sm font-medium flex items-center">
                       <Users className="w-4 h-4 mr-1.5" />
@@ -257,12 +311,13 @@ const Internships = () => {
                   <div className="mt-auto pt-6 border-t border-slate-100 flex items-center space-x-3">
                     <Link
                       to={`/opportunity/${internship._id}`}
-                      className={`flex-1 text-center py-4 rounded-2xl font-bold transition-all shadow-xl flex items-center justify-center group/btn ${hasApplied
-                        ? "bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-emerald-100"
-                        : "bg-slate-900 text-white hover:bg-blue-600 shadow-slate-200"
-                        }`}
+                      className={`flex-1 text-center py-4 rounded-2xl font-bold transition-all shadow-xl flex items-center justify-center group/btn ${
+                        hasApplied
+                          ? "bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-emerald-100"
+                          : "bg-slate-900 text-white hover:bg-blue-600 shadow-slate-200"
+                      }`}
                     >
-                      {hasApplied ? 'Review Status' : 'Apply Now'}{" "}
+                      {hasApplied ? "Review Status" : "Apply Now"}{" "}
                       <ChevronRight className="w-5 h-5 ml-1 group-hover/btn:translate-x-1 transition-transform" />
                     </Link>
                     <button className="p-4 bg-slate-100 text-slate-600 rounded-2xl hover:bg-slate-200 transition-colors">
@@ -280,8 +335,13 @@ const Internships = () => {
             <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
               <Briefcase className="w-10 h-10 text-slate-300" />
             </div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-2">No matching internships</h3>
-            <p className="text-slate-500 max-w-sm mx-auto mb-8">Try adjusting your filters or search terms to find what you're looking for.</p>
+            <h3 className="text-2xl font-bold text-slate-800 mb-2">
+              No matching internships
+            </h3>
+            <p className="text-slate-500 max-w-sm mx-auto mb-8">
+              Try adjusting your filters or search terms to find what you're
+              looking for.
+            </p>
             <button
               onClick={clearFilters}
               className="bg-blue-600 text-white px-8 py-3.5 rounded-2xl font-bold shadow-lg hover:bg-blue-700 transition-all"

@@ -1,33 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
-  Filter, Search, Clock, Users, DollarSign, Star, BookOpen,
-  ChevronRight, Award, PlayCircle, BarChart, Globe, Bookmark, Share2, ShieldCheck
-} from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+  Filter,
+  Search,
+  Clock,
+  Users,
+  DollarSign,
+  Star,
+  BookOpen,
+  ChevronRight,
+  Award,
+  PlayCircle,
+  BarChart,
+  Globe,
+  Bookmark,
+  Share2,
+  ShieldCheck,
+} from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import { mockOpportunities } from "../data/mockData";
+import { API_BASE_URL } from "../config";
 
 const Courses = () => {
   const { user } = useAuth();
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [opportunities, setOpportunities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
-    level: '',
-    price: '',
-    duration: '',
-    provider: ''
+    level: "",
+    price: "",
+    duration: "",
+    provider: "",
   });
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const fetchOpportunities = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/opportunities');
+        const response = await fetch(`${API_BASE_URL}/api/opportunities`);
         const data = await response.json();
-        setOpportunities(data);
+        if (data && data.length > 0) {
+          setOpportunities(data);
+        } else {
+          setOpportunities(mockOpportunities);
+        }
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching opportunities:', err);
+        console.error("Error fetching opportunities:", err);
+        setOpportunities(mockOpportunities);
         setLoading(false);
       }
     };
@@ -35,32 +55,41 @@ const Courses = () => {
     fetchOpportunities();
   }, []);
 
-  const courses = opportunities.filter(opp => opp.type === 'course');
+  const courses = opportunities.filter((opp) => opp.type === "course");
 
-  const filteredCourses = courses.filter(course => {
-    const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredCourses = courses.filter((course) => {
+    const matchesSearch =
+      course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       course.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.requirements.some(req => req.toLowerCase().includes(searchTerm.toLowerCase()));
+      course.requirements.some((req) =>
+        req.toLowerCase().includes(searchTerm.toLowerCase())
+      );
 
-    const matchesProvider = !filters.provider || course.company.toLowerCase().includes(filters.provider.toLowerCase());
-    const matchesLevel = !filters.level || course.requirements.some(req => req.toLowerCase().includes(filters.level.toLowerCase()));
+    const matchesProvider =
+      !filters.provider ||
+      course.company.toLowerCase().includes(filters.provider.toLowerCase());
+    const matchesLevel =
+      !filters.level ||
+      course.requirements.some((req) =>
+        req.toLowerCase().includes(filters.level.toLowerCase())
+      );
 
     return matchesSearch && matchesProvider && matchesLevel;
   });
 
   const handleFilterChange = (filterType, value) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [filterType]: value
+      [filterType]: value,
     }));
   };
 
   const clearFilters = () => {
     setFilters({
-      level: '',
-      price: '',
-      duration: '',
-      provider: ''
+      level: "",
+      price: "",
+      duration: "",
+      provider: "",
     });
   };
 
@@ -69,7 +98,9 @@ const Courses = () => {
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex flex-col items-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-t-emerald-600 border-r-4 border-r-emerald-200"></div>
-          <p className="mt-4 text-slate-600 font-medium italic">Building curriculum...</p>
+          <p className="mt-4 text-slate-600 font-medium italic">
+            Building curriculum...
+          </p>
         </div>
       </div>
     );
@@ -80,7 +111,11 @@ const Courses = () => {
       {/* Educational Header */}
       <div className="bg-emerald-900 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
-          <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <svg
+            className="w-full h-full"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+          >
             <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
           </svg>
         </div>
@@ -93,10 +128,13 @@ const Courses = () => {
                 <span>Certified Learning Tracks</span>
               </div>
               <h1 className="text-5xl md:text-6xl font-black mb-6 tracking-tight">
-                Master New <span className="text-emerald-400">Skills</span> Today
+                Master New <span className="text-emerald-400">Skills</span>{" "}
+                Today
               </h1>
               <p className="text-emerald-100/70 text-xl leading-relaxed">
-                Unlock your potential with courses from the world's best tech companies and universities. Start learning for free or get certified.
+                Unlock your potential with courses from the world's best tech
+                companies and universities. Start learning for free or get
+                certified.
               </p>
             </div>
 
@@ -132,10 +170,12 @@ const Courses = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div>
-                <label className="block text-xs font-black text-slate-400 uppercase mb-2">Skill Level</label>
+                <label className="block text-xs font-black text-slate-400 uppercase mb-2">
+                  Skill Level
+                </label>
                 <select
                   value={filters.level}
-                  onChange={(e) => handleFilterChange('level', e.target.value)}
+                  onChange={(e) => handleFilterChange("level", e.target.value)}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none appearance-none font-medium"
                 >
                   <option value="">All Levels</option>
@@ -146,10 +186,12 @@ const Courses = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-black text-slate-400 uppercase mb-2">Price Range</label>
+                <label className="block text-xs font-black text-slate-400 uppercase mb-2">
+                  Price Range
+                </label>
                 <select
                   value={filters.price}
-                  onChange={(e) => handleFilterChange('price', e.target.value)}
+                  onChange={(e) => handleFilterChange("price", e.target.value)}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none appearance-none font-medium"
                 >
                   <option value="">All Prices</option>
@@ -159,12 +201,16 @@ const Courses = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-black text-slate-400 uppercase mb-2">Partner Provider</label>
+                <label className="block text-xs font-black text-slate-400 uppercase mb-2">
+                  Partner Provider
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. Coursera"
                   value={filters.provider}
-                  onChange={(e) => handleFilterChange('provider', e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange("provider", e.target.value)
+                  }
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none font-medium"
                 />
               </div>
@@ -186,12 +232,16 @@ const Courses = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {filteredCourses.map((course) => {
-            const isEnrolled = user?.applications?.some(app =>
-              (app.opportunityId?._id || app.opportunityId) === course._id
+            const isEnrolled = user?.applications?.some(
+              (app) =>
+                (app.opportunityId?._id || app.opportunityId) === course._id
             );
 
             return (
-              <div key={course._id} className="group bg-white rounded-[2.5rem] border border-slate-200/60 overflow-hidden hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 hover-lift flex flex-col">
+              <div
+                key={course._id}
+                className="group bg-white rounded-[2.5rem] border border-slate-200/60 overflow-hidden hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 hover-lift flex flex-col"
+              >
                 <div className="relative aspect-video w-full overflow-hidden">
                   <img
                     src={course.image}
@@ -207,7 +257,8 @@ const Courses = () => {
                       </div>
                     )}
                     <div className="flex items-center px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white text-[10px] font-black uppercase tracking-widest">
-                      <BarChart className="w-3 h-3 mr-1" /> {course.level || 'Beginner'}
+                      <BarChart className="w-3 h-3 mr-1" />{" "}
+                      {course.level || "Beginner"}
                     </div>
                   </div>
 
@@ -244,12 +295,13 @@ const Courses = () => {
                   <div className="mt-auto flex items-center gap-3">
                     <Link
                       to={`/opportunity/${course._id}`}
-                      className={`flex-1 font-black text-center py-4 rounded-2xl transition-all shadow-xl flex items-center justify-center group/btn ${isEnrolled
-                        ? "bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-emerald-100"
-                        : "bg-slate-900 text-white hover:bg-emerald-600 shadow-slate-100"
-                        }`}
+                      className={`flex-1 font-black text-center py-4 rounded-2xl transition-all shadow-xl flex items-center justify-center group/btn ${
+                        isEnrolled
+                          ? "bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-emerald-100"
+                          : "bg-slate-900 text-white hover:bg-emerald-600 shadow-slate-100"
+                      }`}
                     >
-                      {isEnrolled ? 'Resume Learning' : 'Start Learning'}{" "}
+                      {isEnrolled ? "Resume Learning" : "Start Learning"}{" "}
                       <ChevronRight className="ml-1 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                     </Link>
                     <button className="p-4 bg-slate-50 text-slate-400 rounded-2xl hover:bg-slate-100 hover:text-slate-600 transition-all">
@@ -268,8 +320,13 @@ const Courses = () => {
             <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
               <BookOpen className="w-10 h-10 text-emerald-300" />
             </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-2">No courses found</h3>
-            <p className="text-slate-500 mb-8">We couldn't find any courses matching your search. Subscribe to get notified when new curriculum is added.</p>
+            <h3 className="text-2xl font-bold text-slate-900 mb-2">
+              No courses found
+            </h3>
+            <p className="text-slate-500 mb-8">
+              We couldn't find any courses matching your search. Subscribe to
+              get notified when new curriculum is added.
+            </p>
             <button
               onClick={clearFilters}
               className="bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black shadow-lg hover:bg-emerald-700 transition-all"
