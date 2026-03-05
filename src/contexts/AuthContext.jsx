@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/api/auth/apply`, {
         userId: user._id,
-        opportunityId,
+        opportunityId
       });
       setUser(response.data.user);
     } catch (error) {
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/api/auth/withdraw`, {
         userId: user._id,
-        opportunityId,
+        opportunityId
       });
       setUser(response.data.user);
     } catch (error) {
@@ -86,9 +86,7 @@ export const AuthProvider = ({ children }) => {
   const refreshUser = async () => {
     if (!user) return;
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/api/auth/profile/${user._id}`
-      );
+      const response = await axios.get(`${API_BASE_URL}/api/auth/profile/${user._id}`);
       setUser(response.data.user);
     } catch (error) {
       console.error("Error refreshing user:", error);
@@ -99,21 +97,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        signup,
-        login,
-        logout,
-        applyToOpportunity,
-        withdrawFromOpportunity,
-        refreshUser,
-        isLoading,
-      }}
-    >
+    <AuthContext.Provider value={{ user, signup, login, logout, applyToOpportunity, withdrawFromOpportunity, refreshUser, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
+
 export const useAuth = () => useContext(AuthContext);
+
